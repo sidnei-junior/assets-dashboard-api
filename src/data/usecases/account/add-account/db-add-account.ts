@@ -1,12 +1,14 @@
 import { Hasher } from '@/data/protocols/criptography/hasher'
+import { AddAccountRepository } from '@/data/protocols/db/add-account-repository'
 import { AccountModel } from '@/domain/modals/account'
 import { AddAccount, AddAccountModel } from '@/domain/usecases/account/add-acount'
 
 export class DbAddAccount implements AddAccount {
-  constructor(private readonly hasher: Hasher) {}
+  constructor(private readonly hasher: Hasher, private readonly addAccountRepository: AddAccountRepository) {}
 
-  async add(account: AddAccountModel): Promise<AccountModel> {
-    await this.hasher.hash(account.password)
+  async add(accountData: AddAccountModel): Promise<AccountModel> {
+    const hashedPassword = await this.hasher.hash(accountData.password)
+    await this.addAccountRepository.add({ ...accountData, password: hashedPassword })
     return null
   }
 }
