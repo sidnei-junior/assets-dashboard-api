@@ -5,6 +5,7 @@ import {
   forbidden,
   HttpRequest,
   HttpResponse,
+  ok,
   serverError
 } from './signup-controller-protocols'
 
@@ -25,7 +26,7 @@ export class SignupController implements Controller {
         return forbidden(new EmailInUseError())
       }
 
-      return null
+      return ok({})
     } catch (error) {
       return serverError(error)
     }
