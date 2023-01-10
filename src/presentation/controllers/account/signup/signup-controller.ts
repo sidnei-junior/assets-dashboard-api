@@ -1,5 +1,6 @@
 import {
   AddAccount,
+  Authentication,
   badRequest,
   Controller,
   EmailInUseError,
@@ -12,7 +13,11 @@ import {
 } from './signup-controller-protocols'
 
 export class SignupController implements Controller {
-  constructor(private readonly addAccount: AddAccount, private readonly validation: Validation) {}
+  constructor(
+    private readonly addAccount: AddAccount,
+    private readonly validation: Validation,
+    private readonly authentication: Authentication
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -33,6 +38,11 @@ export class SignupController implements Controller {
       if (!account) {
         return forbidden(new EmailInUseError())
       }
+
+      this.authentication.auth({
+        email,
+        password
+      })
 
       return ok({})
     } catch (error) {
