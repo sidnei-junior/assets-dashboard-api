@@ -3,6 +3,8 @@ import {
   AccountModel,
   AddAccount,
   AddAccountModel,
+  EmailInUseError,
+  forbidden,
   HttpRequest,
   ServerError,
   serverError
@@ -68,5 +70,12 @@ describe('Signup Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(null)
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 })
