@@ -6,6 +6,7 @@ import {
   EmailInUseError,
   forbidden,
   HttpRequest,
+  ok,
   ServerError,
   serverError
 } from './signup-controller-protocols'
@@ -77,5 +78,11 @@ describe('Signup Controller', () => {
     jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(null)
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
+  })
+
+  test('Should return 200 if valid data is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok({}))
   })
 })
