@@ -1,3 +1,5 @@
 export * from '@/domain/usecases/account/add-acount'
 export * from '@/domain/modals/account'
 export * from '@/presentation/protocols'
+export * from '@/presentation/errors'
+export * from '@/presentation/helpers/http/http-helper'
