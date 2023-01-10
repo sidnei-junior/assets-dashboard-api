@@ -1,5 +1,6 @@
 import {
   AddAccount,
+  badRequest,
   Controller,
   EmailInUseError,
   forbidden,
@@ -15,7 +16,11 @@ export class SignupController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(httpRequest.body)
+
+      if (error) {
+        return badRequest(error)
+      }
 
       const { name, password, email } = httpRequest.body
 
