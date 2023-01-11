@@ -22,7 +22,6 @@ describe('Login Routes', () => {
 
   describe('POST /signup', () => {
     test('Should return 200 on signup', async () => {
-      console.log('imprimindo 200', app)
       await request(app)
         .post('/api/signup')
         .send({
