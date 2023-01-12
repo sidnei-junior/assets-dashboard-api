@@ -1,7 +1,7 @@
 import { AddCompany } from '@/domain/usecases/company/add-company'
 import { CnpjInUseError } from '@/presentation/errors/cnpj-in-use-error'
 import { Controller, HttpRequest, HttpResponse } from '../../account/login/login-controller-protocols'
-import { forbidden, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
+import { forbidden, noContent, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
 
 export class AddCompanyController implements Controller {
   constructor(private readonly addCompany: AddCompany) {}
@@ -15,7 +15,7 @@ export class AddCompanyController implements Controller {
         return forbidden(new CnpjInUseError())
       }
 
-      return null
+      return noContent()
     } catch (error) {
       return serverError(error)
     }
