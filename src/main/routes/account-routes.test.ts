@@ -3,6 +3,7 @@ import { Collection } from 'mongodb'
 import request from 'supertest'
 import app from '../config/app'
 import env from '../config/env'
+import { hash } from 'bcrypt'
 
 let accountCollection: Collection
 
@@ -31,6 +32,34 @@ describe('Login Routes', () => {
           passwordConfirmation: '123'
         })
         .expect(200)
+    })
+  })
+
+  describe('POST /login', () => {
+    test('Should return 200 on login', async () => {
+      const password = await hash('123', 12)
+      await accountCollection.insertOne({
+        name: 'Sidnei',
+        email: 'sidnei.ifrn@gmail.com',
+        password
+      })
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'sidnei.ifrn@gmail.com',
+          password: '123'
+        })
+        .expect(200)
+    })
+
+    test('Should return 401 on login', async () => {
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'sidnei.ifrn@gmail.com',
+          password: '123'
+        })
+        .expect(401)
     })
   })
 })
