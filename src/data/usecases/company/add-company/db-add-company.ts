@@ -5,8 +5,8 @@ import { AddCompany, AddCompanyModel } from '@/domain/usecases/company/add-compa
 export class DbAddCompany implements AddCompany {
   constructor(private readonly addCompanyRepository: AddCompanyRepository) {}
 
-  async add(company: AddCompanyModel): Promise<CompanyModel> {
-    await this.addCompanyRepository.add(company)
-    return null
+  async add(companyData: AddCompanyModel): Promise<CompanyModel> {
+    const company = await this.addCompanyRepository.add(companyData)
+    return company
   }
 }
