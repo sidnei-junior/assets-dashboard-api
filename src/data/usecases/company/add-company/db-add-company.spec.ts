@@ -1,4 +1,5 @@
 import { AddCompanyRepository } from '@/data/protocols/db/company/add-company-repository'
+import { LoadCompanyByCnpjRepository } from '@/data/protocols/db/company/load-company-by-cnpj-repository'
 import { CompanyModel } from '@/domain/modals/company'
 import { AddCompanyModel } from '@/domain/usecases/company/add-company'
 import { DbAddCompany } from './db-add-company'
@@ -24,15 +25,26 @@ const makeAddCompanyRepository = (): AddCompanyRepository => {
   return new AddCompanyRepositoryStub()
 }
 
+const makeLoadCompanyByCnpjRepository = (): LoadCompanyByCnpjRepository => {
+  class LoadCompanyByCnpjRepositoryStub implements LoadCompanyByCnpjRepository {
+    async loadByCnpj(cnpj: string): Promise<CompanyModel> {
+      return null
+    }
+  }
+  return new LoadCompanyByCnpjRepositoryStub()
+}
+
 type SutTypes = {
   sut: DbAddCompany
   addCompanyRepositoryStub: AddCompanyRepository
+  loadCompanyByCnpjRepositoryStub: LoadCompanyByCnpjRepository
 }
 
 const makeSut = (): SutTypes => {
   const addCompanyRepositoryStub = makeAddCompanyRepository()
-  const sut = new DbAddCompany(addCompanyRepositoryStub)
-  return { sut, addCompanyRepositoryStub }
+  const loadCompanyByCnpjRepositoryStub = makeLoadCompanyByCnpjRepository()
+  const sut = new DbAddCompany(addCompanyRepositoryStub, loadCompanyByCnpjRepositoryStub)
+  return { sut, addCompanyRepositoryStub, loadCompanyByCnpjRepositoryStub }
 }
 
 describe('DbAddCompany Usecase', () => {
@@ -50,5 +62,12 @@ describe('DbAddCompany Usecase', () => {
     const { sut } = makeSut()
     const company = await sut.add(makeFakeCompanyData())
     expect(company).toEqual(makeFakeCompany())
+  })
+
+  test('Should call LoadCompanyByCnpjRespository with correct cnpj', async () => {
+    const { sut, loadCompanyByCnpjRepositoryStub } = makeSut()
+    const loadSpy = jest.spyOn(loadCompanyByCnpjRepositoryStub, 'loadByCnpj')
+    await sut.add(makeFakeCompanyData())
+    expect(loadSpy).toHaveBeenCalledWith('valid_cnpj')
   })
 })
