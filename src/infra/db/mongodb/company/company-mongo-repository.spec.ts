@@ -37,4 +37,19 @@ describe('Company Mongo Repository', () => {
       expect(company.cnpj).toBe('any_cnpj')
     })
   })
+
+  describe('loadByCnpj()', () => {
+    test('Should return a company on loadByCnpj success', async () => {
+      const sut = makeSut()
+      await companyCollection.insertOne({
+        name: 'any_name',
+        cnpj: 'any_cnpj'
+      })
+      const company = await sut.loadByCnpj('any_cnpj')
+      expect(company).toBeTruthy()
+      expect(company.id).toBeTruthy()
+      expect(company.name).toBe('any_name')
+      expect(company.cnpj).toBe('any_cnpj')
+    })
+  })
 })
