@@ -2,7 +2,15 @@ import { CompanyModel } from '@/domain/modals/company'
 import { AddCompany, AddCompanyModel } from '@/domain/usecases/company/add-company'
 import { CnpjInUseError } from '@/presentation/errors/cnpj-in-use-error'
 import { HttpRequest, Validation } from '../../account/login/login-controller-protocols'
-import { forbidden, noContent, ok, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
+import {
+  badRequest,
+  forbidden,
+  MissingParamError,
+  noContent,
+  ok,
+  ServerError,
+  serverError
+} from '../../account/signup/signup-controller-protocols'
 import { AddCompanyController } from './add-company-controller'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -90,5 +98,12 @@ describe('AddCompany Controller', () => {
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
   })
 })
