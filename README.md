@@ -4,16 +4,16 @@
 
 ### Usuário (Account)
 
-[:heavy_check_mark:] Adicionar Conta de Usuário
+[✔️] Adicionar Conta de Usuário
 
-[:heavy_check_mark:] Fazer Login
+[✔️] Fazer Login
 
 ### Empresa (Company)
 
-[:o:] Adicionar Empresa
+[⭕] Adicionar Empresa
 
-[:o:] Listar Empresas
+[⭕] Listar Empresas
 
-[:o:] Atualizar Dados da Empresa
+[⭕] Atualizar Dados da Empresa
 
-[:o:] Deletar Empresa
+[⭕] Deletar Empresa
