@@ -45,4 +45,10 @@ describe('DbAddCompany Usecase', () => {
       cnpj: 'valid_cnpj'
     })
   })
+
+  test('Should return a company on success', async () => {
+    const { sut } = makeSut()
+    const company = await sut.add(makeFakeCompanyData())
+    expect(company).toEqual(makeFakeCompany())
+  })
 })
