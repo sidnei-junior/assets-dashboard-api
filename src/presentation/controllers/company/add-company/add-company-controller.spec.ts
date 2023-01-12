@@ -1,7 +1,7 @@
 import { CompanyModel } from '@/domain/modals/company'
 import { AddCompany, AddCompanyModel } from '@/domain/usecases/company/add-company'
 import { CnpjInUseError } from '@/presentation/errors/cnpj-in-use-error'
-import { HttpRequest } from '../../account/login/login-controller-protocols'
+import { HttpRequest, Validation } from '../../account/login/login-controller-protocols'
 import { forbidden, noContent, ok, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
 import { AddCompanyController } from './add-company-controller'
 
@@ -28,15 +28,26 @@ const makeFakeCompany = (): CompanyModel => ({
   cnpj: 'any_cnpj'
 })
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: any): Error {
+      return null
+    }
+  }
+  return new ValidationStub()
+}
+
 type SutTypes = {
   sut: AddCompanyController
   addCompanyStub: AddCompany
+  validationStub: Validation
 }
 
 const makeSut = (): SutTypes => {
   const addCompanyStub = makeAddCompany()
-  const sut = new AddCompanyController(addCompanyStub)
-  return { sut, addCompanyStub }
+  const validationStub = makeValidation()
+  const sut = new AddCompanyController(addCompanyStub, validationStub)
+  return { sut, addCompanyStub, validationStub }
 }
 
 describe('AddCompany Controller', () => {
@@ -71,5 +82,13 @@ describe('AddCompany Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(noContent())
+  })
+
+  test('Should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
