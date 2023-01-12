@@ -70,4 +70,13 @@ describe('DbAddCompany Usecase', () => {
     await sut.add(makeFakeCompanyData())
     expect(loadSpy).toHaveBeenCalledWith('valid_cnpj')
   })
+
+  test('Should return null if LoadCompanyByCnpjRespository not return null', async () => {
+    const { sut, loadCompanyByCnpjRepositoryStub } = makeSut()
+    jest
+      .spyOn(loadCompanyByCnpjRepositoryStub, 'loadByCnpj')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(makeFakeCompany())))
+    const company = await sut.add(makeFakeCompanyData())
+    expect(company).toBeNull()
+  })
 })
