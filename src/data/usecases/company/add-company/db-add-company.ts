@@ -10,7 +10,11 @@ export class DbAddCompany implements AddCompany {
   ) {}
 
   async add(companyData: AddCompanyModel): Promise<CompanyModel> {
-    await this.loadCompanyByCnpjRepository.loadByCnpj(companyData.cnpj)
+    const cnpjAlreadyRegistered = await this.loadCompanyByCnpjRepository.loadByCnpj(companyData.cnpj)
+
+    if (cnpjAlreadyRegistered) {
+      return null
+    }
 
     const company = await this.addCompanyRepository.add(companyData)
     return company
