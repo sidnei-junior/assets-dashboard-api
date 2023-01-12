@@ -1,6 +1,5 @@
 import {
   AccountModel,
-  AddAccount,
   AddAccountModel,
   AddAccountRepository,
   Hasher,
