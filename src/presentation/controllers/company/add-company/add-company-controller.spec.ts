@@ -1,7 +1,8 @@
 import { CompanyModel } from '@/domain/modals/company'
 import { AddCompany, AddCompanyModel } from '@/domain/usecases/company/add-company'
+import { CnpjInUseError } from '@/presentation/errors/cnpj-in-use-error'
 import { HttpRequest } from '../../account/login/login-controller-protocols'
-import { ServerError, serverError } from '../../account/signup/signup-controller-protocols'
+import { forbidden, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
 import { AddCompanyController } from './add-company-controller'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -57,5 +58,12 @@ describe('AddCompany Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 403 if AddCompany returns null', async () => {
+    const { sut, addCompanyStub } = makeSut()
+    jest.spyOn(addCompanyStub, 'add').mockReturnValueOnce(null)
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new CnpjInUseError()))
   })
 })
