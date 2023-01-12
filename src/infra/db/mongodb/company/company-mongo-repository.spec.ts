@@ -51,5 +51,11 @@ describe('Company Mongo Repository', () => {
       expect(company.name).toBe('any_name')
       expect(company.cnpj).toBe('any_cnpj')
     })
+
+    test('Should return null if loadByCnpj fails', async () => {
+      const sut = makeSut()
+      const company = await sut.loadByCnpj('any_cnpj')
+      expect(company).toBeFalsy()
+    })
   })
 })
