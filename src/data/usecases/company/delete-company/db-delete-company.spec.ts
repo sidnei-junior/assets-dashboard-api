@@ -27,4 +27,11 @@ describe('DbDeleteCompany Usecase', () => {
     await sut.delete('any_id')
     expect(deleteSpy).toHaveBeenCalledWith('any_id')
   })
+
+  test('Should return null if DeleteCompanyRepository return null', async () => {
+    const { sut, deleteCompanyRepositoryStub } = makeSut()
+    jest.spyOn(deleteCompanyRepositoryStub, 'delete').mockReturnValueOnce(null)
+    const response = await sut.delete('any_id')
+    expect(response).toBeNull()
+  })
 })
