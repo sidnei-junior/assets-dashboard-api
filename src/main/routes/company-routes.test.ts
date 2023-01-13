@@ -72,4 +72,10 @@ describe('Company Routes', () => {
         .expect(204)
     })
   })
+
+  describe('GET /companies', () => {
+    test('Should return 403 on load companies without accessToken', async () => {
+      await request(app).get('/api/companies').expect(403)
+    })
+  })
 })
