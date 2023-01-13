@@ -58,4 +58,26 @@ describe('Company Mongo Repository', () => {
       expect(company).toBeFalsy()
     })
   })
+
+  describe('loadAll()', () => {
+    test('Should load all companies on success', async () => {
+      const sut = makeSut()
+      await companyCollection.insertMany([
+        {
+          id: 'any_id',
+          name: 'any_name',
+          cnpj: 'any_cnpj'
+        },
+        {
+          id: 'other_id',
+          name: 'other_name',
+          cnpj: 'other_cnpj'
+        }
+      ])
+      const companies = await sut.loadAll()
+      expect(companies.length).toBe(2)
+      expect(companies[0].cnpj).toBe('any_cnpj')
+      expect(companies[1].cnpj).toBe('other_cnpj')
+    })
+  })
 })
