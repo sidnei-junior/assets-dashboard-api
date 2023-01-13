@@ -26,4 +26,4 @@
 
 [⭕] Atualizar Dados da Empresa
 
-[⭕] Deletar Empresa
+[✔️] Deletar Empresa
