@@ -86,4 +86,10 @@ describe('Company Routes', () => {
         .expect(200 | 204)
     })
   })
+
+  describe('DELETE /companies/:companyId', () => {
+    test('Should return 403 on delete company without accessToken', async () => {
+      await request(app).delete('/api/companies/any_company_id').expect(403)
+    })
+  })
 })
