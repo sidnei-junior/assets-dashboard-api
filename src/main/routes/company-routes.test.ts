@@ -91,5 +91,17 @@ describe('Company Routes', () => {
     test('Should return 403 on delete company without accessToken', async () => {
       await request(app).delete('/api/companies/any_company_id').expect(403)
     })
+
+    test('Should return 204 on success', async () => {
+      const mongoResponse = await companyCollection.insertOne({
+        name: 'any_name',
+        cnpj: 'any_cnpj'
+      })
+      const accessToken = await makeAccessToken({ role: 'admin' })
+      await request(app)
+        .delete(`/api/companies/${mongoResponse.insertedId.toHexString()}`)
+        .set('x-access-token', accessToken)
+        .expect(204)
+    })
   })
 })
