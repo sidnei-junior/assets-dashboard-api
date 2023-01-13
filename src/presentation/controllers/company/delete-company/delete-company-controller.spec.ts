@@ -1,5 +1,5 @@
 import { DeleteCompany } from '@/domain/usecases/company/delete-company'
-import { notFound } from '@/presentation/helpers/http/http-helper'
+import { noContent, notFound } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { DeleteCompanyController } from './delete-company-controller'
 
@@ -41,5 +41,11 @@ describe('DeleteCompany Controller', () => {
     jest.spyOn(deleteCompanyStub, 'delete').mockReturnValueOnce(null)
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(notFound())
+  })
+
+  test('Should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(noContent())
   })
 })
