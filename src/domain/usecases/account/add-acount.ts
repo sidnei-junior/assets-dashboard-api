@@ -1,4 +1,4 @@
-import { AccountModel } from '@/domain/modals/account'
+import { AccountModel } from '@/domain/models/account'
 
 export type AddAccountModel = Omit<AccountModel, 'id'>
 

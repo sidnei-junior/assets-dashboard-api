@@ -1,4 +1,4 @@
-import { CompanyModel } from '@/domain/modals/company'
+import { CompanyModel } from '@/domain/models/company'
 import { AddCompany, AddCompanyModel } from '@/domain/usecases/company/add-company'
 import { CnpjInUseError } from '@/presentation/errors/cnpj-in-use-error'
 import { HttpRequest, Validation } from '../../account/login/login-controller-protocols'

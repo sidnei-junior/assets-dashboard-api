@@ -6,7 +6,7 @@ import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-a
 import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/uptade-access-token-repository'
 import { AddAccountModel } from '@/domain/usecases/account/add-acount'
-import { AccountModel } from '@/domain/modals/account'
+import { AccountModel } from '@/domain/models/account'
 import { MongoHelper } from '../helper/mongo-helper'
 
 export class AccountMongoRepository
