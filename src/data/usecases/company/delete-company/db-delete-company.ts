@@ -6,6 +6,5 @@ export class DbDeleteCompany implements DeleteCompany {
 
   async delete(id: string): Promise<void> {
     await this.deleteCompanyRepository.delete(id)
-    return null
   }
 }
