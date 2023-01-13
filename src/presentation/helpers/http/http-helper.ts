@@ -1,4 +1,4 @@
-import { ServerError, UnauthorizedError } from '@/presentation/errors'
+import { NotFoundError, ServerError, UnauthorizedError } from '@/presentation/errors'
 import { HttpResponse } from '@/presentation/protocols'
 
 export const ok = (data: any): HttpResponse => ({
@@ -28,7 +28,7 @@ export const forbidden = (error: Error): HttpResponse => ({
 
 export const notFound = (): HttpResponse => ({
   statusCode: 404,
-  body: null
+  body: new NotFoundError()
 })
 
 export const serverError = (error: Error): HttpResponse => ({
