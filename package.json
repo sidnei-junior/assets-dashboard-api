@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/sidnei-junior/assets-dashboard-api#readme",
   "devDependencies": {
+    "@shelf/jest-mongodb": "^4.1.4",
     "@types/jest": "^29.2.5",
+    "@types/mongodb": "^4.0.7",
     "@types/supertest": "^2.0.12",
     "git-commit-msg-linter": "^4.5.0",
     "husky": "^8.0.3",
