@@ -5,6 +5,9 @@ export class DbDeleteCompany implements DeleteCompany {
   constructor(private readonly deleteCompanyRepository: DeleteCompanyRepository) {}
 
   async delete(id: string): Promise<void> {
-    await this.deleteCompanyRepository.delete(id)
+    const response = await this.deleteCompanyRepository.delete(id)
+    if (response === null) {
+      return response
+    }
   }
 }
