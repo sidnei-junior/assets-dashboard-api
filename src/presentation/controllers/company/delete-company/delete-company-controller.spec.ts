@@ -1,4 +1,5 @@
 import { DeleteCompany } from '@/domain/usecases/company/delete-company'
+import { notFound } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { DeleteCompanyController } from './delete-company-controller'
 
@@ -33,5 +34,12 @@ describe('DeleteCompany Controller', () => {
     const deleteSpy = jest.spyOn(deleteCompanyStub, 'delete')
     await sut.handle(makeFakeRequest())
     expect(deleteSpy).toHaveBeenCalledWith('any_id')
+  })
+
+  test('Should return 404 if DeleteCompany return null', async () => {
+    const { sut, deleteCompanyStub } = makeSut()
+    jest.spyOn(deleteCompanyStub, 'delete').mockReturnValueOnce(null)
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(notFound())
   })
 })
