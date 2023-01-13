@@ -20,7 +20,7 @@
 
 ### Empresa (Company)
 
-[⭕] Adicionar Empresa
+[✔️] Adicionar Empresa
 
 [⭕] Listar Empresas
 
