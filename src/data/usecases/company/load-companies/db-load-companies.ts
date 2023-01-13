@@ -5,7 +5,7 @@ import { LoadCompanies } from '@/domain/usecases/company/load-companies'
 export class DbLoadCompanies implements LoadCompanies {
   constructor(private readonly loadCompaniesRepository: LoadCompaniesRepository) {}
   async load(): Promise<CompanyModel[]> {
-    await this.loadCompaniesRepository.loadAll()
-    return null
+    const companies = await this.loadCompaniesRepository.loadAll()
+    return companies
   }
 }
