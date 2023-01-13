@@ -3,8 +3,20 @@ import { Collection } from 'mongodb'
 import env from '@/main/config/env'
 import { MongoHelper } from '../helper/mongo-helper'
 import { CompanyMongoRepository } from './company-mongo-repository'
+import { AddCompanyModel } from '@/domain/usecases/company/add-company'
 
 let companyCollection: Collection
+
+const makeFakeCompaniesDatas = (): AddCompanyModel[] => [
+  {
+    name: 'any_name',
+    cnpj: 'any_cnpj'
+  },
+  {
+    name: 'other_name',
+    cnpj: 'other_cnpj'
+  }
+]
 
 describe('Company Mongo Repository', () => {
   beforeAll(async () => {
@@ -62,18 +74,7 @@ describe('Company Mongo Repository', () => {
   describe('loadAll()', () => {
     test('Should load all companies on success', async () => {
       const sut = makeSut()
-      await companyCollection.insertMany([
-        {
-          id: 'any_id',
-          name: 'any_name',
-          cnpj: 'any_cnpj'
-        },
-        {
-          id: 'other_id',
-          name: 'other_name',
-          cnpj: 'other_cnpj'
-        }
-      ])
+      await companyCollection.insertMany(makeFakeCompaniesDatas())
       const companies = await sut.loadAll()
       expect(companies.length).toBe(2)
       expect(companies[0].cnpj).toBe('any_cnpj')
@@ -84,20 +85,9 @@ describe('Company Mongo Repository', () => {
   describe('delete()', () => {
     test('Should delete companies on success', async () => {
       const sut = makeSut()
-      await companyCollection.insertMany([
-        {
-          id: 'any_id',
-          name: 'any_name',
-          cnpj: 'any_cnpj'
-        },
-        {
-          id: 'other_id',
-          name: 'other_name',
-          cnpj: 'other_cnpj'
-        }
-      ])
-
-      await sut.delete('any_id')
+      const result = await companyCollection.insertMany(makeFakeCompaniesDatas())
+      const { insertedIds } = result
+      await sut.delete(insertedIds[0].toHexString())
 
       const companies = await sut.loadAll()
 

@@ -4,6 +4,7 @@ import { LoadCompaniesRepository } from '@/data/protocols/db/company/load-compan
 import { LoadCompanyByCnpjRepository } from '@/data/protocols/db/company/load-company-by-cnpj-repository'
 import { CompanyModel } from '@/domain/models/company'
 import { AddCompanyModel } from '@/domain/usecases/company/add-company'
+import { ObjectId } from 'mongodb'
 import { MongoHelper } from '../helper/mongo-helper'
 
 export class CompanyMongoRepository
@@ -32,7 +33,8 @@ export class CompanyMongoRepository
   }
 
   async delete(id: string): Promise<void> {
+    const mongoId = new ObjectId(id)
     const companyCollection = await MongoHelper.getCollection('companies')
-    await companyCollection.deleteOne({ id })
+    await companyCollection.deleteOne({ _id: mongoId })
   }
 }
