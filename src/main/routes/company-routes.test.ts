@@ -59,5 +59,17 @@ describe('Company Routes', () => {
         })
         .expect(403)
     })
+
+    test('Should return 204 on add company with valid accessToken', async () => {
+      const accessToken = await makeAccessToken({ role: 'admin' })
+      await request(app)
+        .post('/api/companies')
+        .set('x-access-token', accessToken)
+        .send({
+          name: 'TRACTIAN',
+          cnpj: '111.111'
+        })
+        .expect(204)
+    })
   })
 })
