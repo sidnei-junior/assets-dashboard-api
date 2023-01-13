@@ -80,4 +80,29 @@ describe('Company Mongo Repository', () => {
       expect(companies[1].cnpj).toBe('other_cnpj')
     })
   })
+
+  describe('delete()', () => {
+    test('Should delete companies on success', async () => {
+      const sut = makeSut()
+      await companyCollection.insertMany([
+        {
+          id: 'any_id',
+          name: 'any_name',
+          cnpj: 'any_cnpj'
+        },
+        {
+          id: 'other_id',
+          name: 'other_name',
+          cnpj: 'other_cnpj'
+        }
+      ])
+
+      await sut.delete('any_id')
+
+      const companies = await sut.loadAll()
+
+      expect(companies.length).toBe(1)
+      expect(companies[0].cnpj).toBe('other_cnpj')
+    })
+  })
 })
