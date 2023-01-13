@@ -22,7 +22,7 @@
 
 [✔️] Adicionar Empresa
 
-[⭕] Listar Empresas
+[✔️] Listar Empresas
 
 [⭕] Atualizar Dados da Empresa
 
