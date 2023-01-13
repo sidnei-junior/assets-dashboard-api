@@ -1,10 +1,13 @@
 import { AddCompanyRepository } from '@/data/protocols/db/company/add-company-repository'
+import { LoadCompaniesRepository } from '@/data/protocols/db/company/load-companies-repository'
 import { LoadCompanyByCnpjRepository } from '@/data/protocols/db/company/load-company-by-cnpj-repository'
 import { CompanyModel } from '@/domain/models/company'
 import { AddCompanyModel } from '@/domain/usecases/company/add-company'
 import { MongoHelper } from '../helper/mongo-helper'
 
-export class CompanyMongoRepository implements AddCompanyRepository, LoadCompanyByCnpjRepository {
+export class CompanyMongoRepository
+  implements AddCompanyRepository, LoadCompanyByCnpjRepository, LoadCompaniesRepository
+{
   async add(companyData: AddCompanyModel): Promise<CompanyModel> {
     const companyCollection = await MongoHelper.getCollection('companies')
     const result = await companyCollection.insertOne(companyData)
@@ -19,5 +22,11 @@ export class CompanyMongoRepository implements AddCompanyRepository, LoadCompany
     const companyByCnpj = await companyCollection.findOne({ cnpj })
     const company = companyByCnpj && MongoHelper.map(companyByCnpj)
     return company
+  }
+
+  async loadAll(): Promise<CompanyModel[]> {
+    const companyCollection = await MongoHelper.getCollection('companies')
+    const companies: CompanyModel[] = (await companyCollection.find().toArray()) as unknown as CompanyModel[]
+    return companies
   }
 }
