@@ -1,5 +1,6 @@
 import { CompanyModel } from '@/domain/models/company'
 import { LoadCompanies } from '@/domain/usecases/company/load-companies'
+import { ok } from '@/presentation/helpers/http/http-helper'
 import { LoadCompaniesController } from './load-companies-controller'
 
 const makeLoadCompanies = (): LoadCompanies => {
@@ -44,5 +45,11 @@ describe('LoadCompanies Controller', () => {
     const loadSpy = jest.spyOn(loadCompaniesStub, 'load')
     await sut.handle({})
     expect(loadSpy).toHaveBeenCalled()
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(makeFakeCompanies()))
   })
 })
