@@ -1,3 +1,3 @@
-export interface DeletCompany {
+export interface DeleteCompany {
   delete: (id: string) => Promise<void>
 }
