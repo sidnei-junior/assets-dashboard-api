@@ -94,5 +94,11 @@ describe('Company Mongo Repository', () => {
       expect(companies.length).toBe(1)
       expect(companies[0].cnpj).toBe('other_cnpj')
     })
+
+    test('Should return null if mongo return deleteCount 0', async () => {
+      const sut = makeSut()
+      const response = await sut.delete('63c170afa3a8b2549002bbd8')
+      expect(response).toBeNull()
+    })
   })
 })
