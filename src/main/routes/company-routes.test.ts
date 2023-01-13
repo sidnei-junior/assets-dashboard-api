@@ -77,5 +77,13 @@ describe('Company Routes', () => {
     test('Should return 403 on load companies without accessToken', async () => {
       await request(app).get('/api/companies').expect(403)
     })
+
+    test('Should return 2xx on load companies with valid accessToken', async () => {
+      const accessToken = await makeAccessToken({ role: 'admin' })
+      await request(app)
+        .get('/api/companies')
+        .set('x-access-token', accessToken)
+        .expect(200 | 204)
+    })
   })
 })
