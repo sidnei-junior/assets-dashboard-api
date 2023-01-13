@@ -49,4 +49,13 @@ describe('DbLoadCompanies Usecase', () => {
     const companies = await sut.load()
     expect(companies).toEqual(makeFakeCompanies())
   })
+
+  test('Should throw if LoadCompaniesRepository throws ', async () => {
+    const { sut, loadCompaniesRepositoryStub } = makeSut()
+    jest
+      .spyOn(loadCompaniesRepositoryStub, 'loadAll')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.load()
+    void expect(promise).rejects.toThrow()
+  })
 })
