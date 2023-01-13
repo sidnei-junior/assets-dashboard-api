@@ -35,6 +35,10 @@ export class CompanyMongoRepository
   async delete(id: string): Promise<void> {
     const mongoId = new ObjectId(id)
     const companyCollection = await MongoHelper.getCollection('companies')
-    await companyCollection.deleteOne({ _id: mongoId })
+    const mongoResponse = await companyCollection.deleteOne({ _id: mongoId })
+    const { deletedCount } = mongoResponse
+    if (deletedCount === 0) {
+      return null
+    }
   }
 }
