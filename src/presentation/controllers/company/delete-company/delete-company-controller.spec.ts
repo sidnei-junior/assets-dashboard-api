@@ -1,5 +1,6 @@
 import { DeleteCompany } from '@/domain/usecases/company/delete-company'
-import { noContent, notFound } from '@/presentation/helpers/http/http-helper'
+import { ServerError } from '@/presentation/errors'
+import { noContent, notFound, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { DeleteCompanyController } from './delete-company-controller'
 
@@ -47,5 +48,14 @@ describe('DeleteCompany Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(noContent())
+  })
+
+  test('Should return 500 if DeleteCompany throws', async () => {
+    const { sut, deleteCompanyStub } = makeSut()
+    jest.spyOn(deleteCompanyStub, 'delete').mockImplementationOnce(async () => {
+      return new Promise((resolve, reject) => reject(new Error()))
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
