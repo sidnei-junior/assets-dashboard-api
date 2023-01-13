@@ -9,6 +9,8 @@
     "test:verbose": "jest --passWithNoTests --noStackTrace --runInBand",
     "test:unit": "npm run test -- --watch -c jest-unit.config.ts",
     "test:integration": "npm run test -- --watch -c jest-integration.config.ts",
+    "test:v:unit": "npm run test:verbose -- --watch -c jest-unit.config.ts",
+    "test:v:integration": "npm run test:verbose -- --watch -c jest-integration.config.ts",
     "test:staged": "npm run test -- --findRelatedTests --coverage",
     "prepare": "husky install"
   },
