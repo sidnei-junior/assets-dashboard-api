@@ -1,4 +1,5 @@
 import { AddCompanyRepository } from '@/data/protocols/db/company/add-company-repository'
+import { DeleteCompanyRepository } from '@/data/protocols/db/company/delete-company-repository'
 import { LoadCompaniesRepository } from '@/data/protocols/db/company/load-companies-repository'
 import { LoadCompanyByCnpjRepository } from '@/data/protocols/db/company/load-company-by-cnpj-repository'
 import { CompanyModel } from '@/domain/models/company'
@@ -6,7 +7,7 @@ import { AddCompanyModel } from '@/domain/usecases/company/add-company'
 import { MongoHelper } from '../helper/mongo-helper'
 
 export class CompanyMongoRepository
-  implements AddCompanyRepository, LoadCompanyByCnpjRepository, LoadCompaniesRepository
+  implements AddCompanyRepository, LoadCompanyByCnpjRepository, LoadCompaniesRepository, DeleteCompanyRepository
 {
   async add(companyData: AddCompanyModel): Promise<CompanyModel> {
     const companyCollection = await MongoHelper.getCollection('companies')
@@ -28,5 +29,10 @@ export class CompanyMongoRepository
     const companyCollection = await MongoHelper.getCollection('companies')
     const companies: CompanyModel[] = (await companyCollection.find().toArray()) as unknown as CompanyModel[]
     return companies
+  }
+
+  async delete(id: string): Promise<void> {
+    const companyCollection = await MongoHelper.getCollection('companies')
+    await companyCollection.deleteOne({ id })
   }
 }
