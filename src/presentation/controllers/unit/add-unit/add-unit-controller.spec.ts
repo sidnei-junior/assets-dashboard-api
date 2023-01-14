@@ -1,7 +1,15 @@
 import { UnitModel } from '@/domain/models/unit'
 import { AddUnit, AddUnitModel } from '@/domain/usecases/unit/add-unit'
 import { HttpRequest, Validation } from '../../account/login/login-controller-protocols'
-import { notFound, NotFoundError, ok, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
+import {
+  badRequest,
+  MissingParamError,
+  notFound,
+  NotFoundError,
+  ok,
+  ServerError,
+  serverError
+} from '../../account/signup/signup-controller-protocols'
 import { AddUnitController } from './add-unit-controller'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -88,5 +96,12 @@ describe('AddUnit Controller', () => {
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
   })
 })
