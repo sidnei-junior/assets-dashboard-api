@@ -1,6 +1,6 @@
 export class NotFoundError extends Error {
-  constructor() {
-    super('Not Found')
+  constructor(param?: string) {
+    super(`Not Found${param ? ' ' + param : ''}`)
     this.name = 'NotFoundError'
   }
 }
