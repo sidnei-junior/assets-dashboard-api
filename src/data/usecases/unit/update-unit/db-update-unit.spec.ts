@@ -1,11 +1,11 @@
 import { UpdateUnitRepository } from '@/data/protocols/db/unit/update-unit-repository'
 import { UnitModel } from '@/domain/models/unit'
-import { ResourceLabelNotFound, UpdateUnitModel } from '@/domain/usecases/unit/update-unit'
+import { UpdateUnitModel } from '@/domain/usecases/unit/update-unit'
 import { DbUpdateUnit } from './db-update-unit'
 
 const makeUpdateUnitRepository = (): UpdateUnitRepository => {
   class UpdateUnitRepositoryStub implements UpdateUnitRepository {
-    async update(unitData: UpdateUnitModel, id: string): Promise<UnitModel | ResourceLabelNotFound> {
+    async update(unitData: UpdateUnitModel, id: string): Promise<UnitModel | string> {
       return makeFakeUnit()
     }
   }
