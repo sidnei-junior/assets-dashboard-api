@@ -1,6 +1,6 @@
 import { AddUnit } from '@/domain/usecases/unit/add-unit'
 import { Controller, HttpRequest, HttpResponse } from '../../account/login/login-controller-protocols'
-import { notFound, NotFoundError, serverError } from '../../account/signup/signup-controller-protocols'
+import { notFound, NotFoundError, ok, serverError } from '../../account/signup/signup-controller-protocols'
 
 export class AddUnitController implements Controller {
   constructor(private readonly addUnit: AddUnit) {}
@@ -11,7 +11,7 @@ export class AddUnitController implements Controller {
       if (unit === null) {
         return notFound(new NotFoundError('company'))
       }
-      return null
+      return ok(unit)
     } catch (error) {
       return serverError(error)
     }
