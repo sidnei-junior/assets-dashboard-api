@@ -71,6 +71,19 @@ describe('Company Mongo Repository', () => {
     })
   })
 
+  describe('loadById()', () => {
+    test('Should return a company on loadById success', async () => {
+      const sut = makeSut()
+      const mongoResponse = await companyCollection.insertOne({
+        name: 'any_name',
+        cnpj: 'any_cnpj'
+      })
+      const { insertedId: id } = mongoResponse
+      const company = await sut.loadById(id.toHexString())
+      expect(company).toBeTruthy()
+    })
+  })
+
   describe('loadAll()', () => {
     test('Should load all companies on success', async () => {
       const sut = makeSut()
