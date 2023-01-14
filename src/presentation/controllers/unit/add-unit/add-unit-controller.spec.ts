@@ -1,6 +1,6 @@
 import { UnitModel } from '@/domain/models/unit'
 import { AddUnit, AddUnitModel } from '@/domain/usecases/unit/add-unit'
-import { HttpRequest } from '../../account/login/login-controller-protocols'
+import { HttpRequest, Validation } from '../../account/login/login-controller-protocols'
 import { notFound, NotFoundError, ok, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
 import { AddUnitController } from './add-unit-controller'
 
@@ -27,15 +27,26 @@ const makeFakeUnit = (): UnitModel => ({
   companyId: 'any_company_id'
 })
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: any): Error {
+      return null
+    }
+  }
+  return new ValidationStub()
+}
+
 type SutTypes = {
-  addUnitStub: AddUnit
   sut: AddUnitController
+  addUnitStub: AddUnit
+  validationStub: Validation
 }
 
 const makeSut = (): SutTypes => {
   const addUnitStub = makeAddUnit()
-  const sut = new AddUnitController(addUnitStub)
-  return { sut, addUnitStub }
+  const validationStub = makeValidation()
+  const sut = new AddUnitController(addUnitStub, validationStub)
+  return { sut, addUnitStub, validationStub }
 }
 
 describe('AddUnit Controller', () => {
@@ -69,5 +80,13 @@ describe('AddUnit Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(ok(makeFakeUnit()))
+  })
+
+  test('Should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
