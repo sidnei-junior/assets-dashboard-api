@@ -6,7 +6,7 @@ export class DbAddUnit implements AddUnit {
   constructor(private readonly addUnitRepository: AddUnitRepository) {}
 
   async add(unitData: AddUnitModel): Promise<UnitModel> {
-    await this.addUnitRepository.add(unitData)
-    return null
+    const unit = await this.addUnitRepository.add(unitData)
+    return unit
   }
 }
