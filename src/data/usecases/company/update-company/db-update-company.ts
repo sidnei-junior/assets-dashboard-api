@@ -6,7 +6,7 @@ export class DbUpdateCompany implements UpdateCompany {
   constructor(private readonly updateCompanyRepository: UpdateCompanyRepository) {}
 
   async update(companyData: UpdateCompanyModel): Promise<CompanyModel> {
-    await this.updateCompanyRepository.update(companyData)
-    return null
+    const company = await this.updateCompanyRepository.update(companyData)
+    return company
   }
 }
