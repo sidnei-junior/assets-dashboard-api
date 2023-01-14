@@ -101,4 +101,25 @@ describe('Company Mongo Repository', () => {
       expect(response).toBeNull()
     })
   })
+
+  describe('update()', () => {
+    test('Should update companies on success', async () => {
+      const sut = makeSut()
+      const result = await companyCollection.insertMany(makeFakeCompaniesDatas())
+      const { insertedIds } = result
+      await sut.update(
+        {
+          name: 'update_name',
+          cnpj: 'update_cnpj'
+        },
+        insertedIds[0].toHexString()
+      )
+
+      const companies = await sut.loadAll()
+
+      expect(companies.length).toBe(2)
+      expect(companies[0].name).toBe('update_name')
+      expect(companies[0].cnpj).toBe('update_cnpj')
+    })
+  })
 })
