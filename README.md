@@ -30,7 +30,7 @@
 
 ### Unidade (Unit)
 
-[⭕] Adicionar Unidade
+[✔️] Adicionar Unidade
 
 [⭕] Listar Unidades da Empresa
 
