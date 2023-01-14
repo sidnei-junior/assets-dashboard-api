@@ -91,4 +91,22 @@ describe('Unit Routes', () => {
         .expect(200 | 204)
     })
   })
+
+  describe('DELETE /units/:unitId', () => {
+    test('Should return 403 on delete unit without accessToken', async () => {
+      await request(app).delete('/api/companies/any_unit_id').expect(403)
+    })
+
+    test('Should return 204 on success', async () => {
+      const mongoResponse = await unitCollection.insertOne({
+        name: 'any_name',
+        companyId: 'any_company_id'
+      })
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .delete(`/api/units/${mongoResponse.insertedId.toHexString()}`)
+        .set('x-access-token', accessToken)
+        .expect(204)
+    })
+  })
 })
