@@ -1,7 +1,7 @@
 import { UnitModel } from '@/domain/models/unit'
 import { AddUnit, AddUnitModel } from '@/domain/usecases/unit/add-unit'
 import { HttpRequest } from '../../account/login/login-controller-protocols'
-import { ServerError, serverError } from '../../account/signup/signup-controller-protocols'
+import { notFound, NotFoundError, ok, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
 import { AddUnitController } from './add-unit-controller'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -56,5 +56,18 @@ describe('AddUnit Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 404 if AddUnit returns null', async () => {
+    const { sut, addUnitStub } = makeSut()
+    jest.spyOn(addUnitStub, 'add').mockReturnValueOnce(null)
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(notFound(new NotFoundError('company')))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeFakeUnit()))
   })
 })
