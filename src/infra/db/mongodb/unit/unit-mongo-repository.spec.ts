@@ -37,4 +37,25 @@ describe('Unit Mongo Repository', () => {
       expect(unit.companyId).toBe('any_company_id')
     })
   })
+
+  describe('loadByCompanyId()', () => {
+    test('Should return a list of units on loadByCompanyId success', async () => {
+      const sut = makeSut()
+      await unitCollection.insertMany([
+        {
+          name: 'any_name',
+          companyId: 'any_company_id'
+        },
+        {
+          name: 'other_name',
+          companyId: 'any_company_id'
+        }
+      ])
+      const units = await sut.loadByCompanyId('any_company_id')
+      expect(units.length).toBe(2)
+      expect(units[0].id).toBeTruthy()
+      expect(units[0].name).toBe('any_name')
+      expect(units[0].companyId).toBe('any_company_id')
+    })
+  })
 })
