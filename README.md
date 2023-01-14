@@ -36,4 +36,4 @@
 
 [⭕] Atualizar Dados da Unidade
 
-[⭕] Deletar Unidade
+[✔️] Deletar Unidade
