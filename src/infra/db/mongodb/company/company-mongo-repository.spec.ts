@@ -121,5 +121,17 @@ describe('Company Mongo Repository', () => {
       expect(companies[0].name).toBe('update_name')
       expect(companies[0].cnpj).toBe('update_cnpj')
     })
+
+    test('Should return null if mongo return matchedCount 0', async () => {
+      const sut = makeSut()
+      const response = await sut.update(
+        {
+          name: 'update_name',
+          cnpj: 'update_cnpj'
+        },
+        '63c170afa3a8b2549002bbd8'
+      )
+      expect(response).toBeNull()
+    })
   })
 })
