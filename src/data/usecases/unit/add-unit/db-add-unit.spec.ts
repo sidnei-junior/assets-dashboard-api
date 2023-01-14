@@ -44,4 +44,10 @@ describe('DbAddUnit Usecase', () => {
       companyId: 'valid_company_id'
     })
   })
+
+  test('Should return a unit on success', async () => {
+    const { sut } = makeSut()
+    const unit = await sut.add(makeFakeUnitData())
+    expect(unit).toEqual(makeFakeUnit())
+  })
 })
