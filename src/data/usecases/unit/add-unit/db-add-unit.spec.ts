@@ -77,4 +77,11 @@ describe('DbAddUnit Usecase', () => {
     await sut.add(makeFakeUnitData())
     expect(loadSpy).toHaveBeenCalledWith('valid_company_id')
   })
+
+  test('Should return null if LoadCompanyByIdRespository return null', async () => {
+    const { sut, loadCompanyByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadCompanyByIdRepositoryStub, 'loadById').mockReturnValueOnce(null)
+    const unit = await sut.add(makeFakeUnitData())
+    expect(unit).toBeNull()
+  })
 })
