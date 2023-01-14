@@ -1,5 +1,5 @@
 import { UpdateCompany } from '@/domain/usecases/company/update-company'
-import { notFound, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, notFound, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class UpdateCompanyController implements Controller {
@@ -7,7 +7,11 @@ export class UpdateCompanyController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      await this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(httpRequest.body)
+
+      if (error) {
+        return badRequest(error)
+      }
       const { companyId: id } = httpRequest.params
       const company = await this.updateCompany.update(httpRequest.body, id)
       if (company === null) {
