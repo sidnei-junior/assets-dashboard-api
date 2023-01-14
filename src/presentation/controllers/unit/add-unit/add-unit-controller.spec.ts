@@ -1,6 +1,7 @@
 import { UnitModel } from '@/domain/models/unit'
 import { AddUnit, AddUnitModel } from '@/domain/usecases/unit/add-unit'
 import { HttpRequest } from '../../account/login/login-controller-protocols'
+import { ServerError, serverError } from '../../account/signup/signup-controller-protocols'
 import { AddUnitController } from './add-unit-controller'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -46,5 +47,14 @@ describe('AddUnit Controller', () => {
       name: 'any_name',
       companyId: 'any_company_id'
     })
+  })
+
+  test('Should return 500 if AddUnit throws', async () => {
+    const { sut, addUnitStub } = makeSut()
+    jest.spyOn(addUnitStub, 'add').mockImplementationOnce(async () => {
+      return new Promise((resolve, reject) => reject(new Error()))
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
