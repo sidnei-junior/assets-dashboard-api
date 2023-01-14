@@ -52,7 +52,10 @@ export class CompanyMongoRepository
   async update(companyData: UpdateCompanyModel, id: string): Promise<CompanyModel> {
     const mongoId = new ObjectId(id)
     const companyCollection = await MongoHelper.getCollection('companies')
-    await companyCollection.updateMany({ _id: mongoId }, { $set: { ...companyData } })
+    const { matchedCount } = await companyCollection.updateOne({ _id: mongoId }, { $set: { ...companyData } })
+    if (matchedCount === 0) {
+      return null
+    }
     const companyById = await companyCollection.findOne({ _id: mongoId })
     const company = MongoHelper.map(companyById)
     return company
