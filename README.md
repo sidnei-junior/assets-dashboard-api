@@ -32,7 +32,7 @@
 
 [✔️] Adicionar Unidade
 
-[⭕] Listar Unidades da Empresa
+[✔️] Listar Unidades da Empresa
 
 [⭕] Atualizar Dados da Unidade
 
