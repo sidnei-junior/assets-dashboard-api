@@ -4,8 +4,23 @@ import env from '@/main/config/env'
 import { MongoHelper } from '../helper/mongo-helper'
 import { UnitMongoRepository } from './unit-mongo-repository'
 import { AddUnitModel } from '@/domain/usecases/unit/add-unit'
+import { AddCompanyModel } from '@/domain/usecases/company/add-company'
 
 let unitCollection: Collection
+let companyCollection: Collection
+
+const makeFakeUnitData = (): AddUnitModel => ({ name: 'any_name', companyId: 'any_company_id' })
+
+const makeFakeCompaniesDatas = (): AddCompanyModel[] => [
+  {
+    name: 'any_name',
+    cnpj: 'any_cnpj'
+  },
+  {
+    name: 'other_name',
+    cnpj: 'other_cnpj'
+  }
+]
 
 const makeFakeUnitsDatas = (): AddUnitModel[] => [
   { name: 'any_name', companyId: 'any_company_id' },
@@ -24,6 +39,8 @@ describe('Unit Mongo Repository', () => {
   beforeEach(async () => {
     unitCollection = await MongoHelper.getCollection('units')
     await unitCollection.deleteMany({})
+    companyCollection = await MongoHelper.getCollection('companies')
+    await companyCollection.deleteMany({})
   })
 
   const makeSut = (): UnitMongoRepository => {
@@ -82,6 +99,47 @@ describe('Unit Mongo Repository', () => {
       const sut = makeSut()
       const response = await sut.delete('63c170afa3a8b2549002bbd8')
       expect(response).toBeNull()
+    })
+  })
+
+  describe('update()', () => {
+    test('Should update unit on success', async () => {
+      const sut = makeSut()
+
+      const companyResult = await companyCollection.insertMany(makeFakeCompaniesDatas())
+      const { insertedIds: companiesIds } = companyResult
+
+      const unitResult = await unitCollection.insertOne({
+        ...makeFakeUnitData(),
+        companyId: companiesIds[0].toHexString()
+      })
+      const { insertedId } = unitResult
+
+      const unitReturned = await sut.update(
+        {
+          name: 'update_name',
+          companyId: companiesIds[1].toHexString()
+        },
+        insertedId.toHexString()
+      )
+
+      const units = await sut.loadByCompanyId(companiesIds[1].toHexString())
+
+      expect(units.length).toBe(1)
+      expect(units[0].name).toBe('update_name')
+      expect(units[0].companyId).toBe(companiesIds[1].toHexString())
+    })
+
+    test('Should return string unit if mongo return matchedCount 0', async () => {
+      const sut = makeSut()
+      const response = await sut.update(
+        {
+          name: 'update_name',
+          companyId: 'update_company_id'
+        },
+        '63c170afa3a8b2549002bbd8'
+      )
+      expect(response).toBe('unit')
     })
   })
 })
