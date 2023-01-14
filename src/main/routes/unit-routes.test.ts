@@ -77,4 +77,18 @@ describe('Unit Routes', () => {
       })
       .expect(200)
   })
+
+  describe('GET /units', () => {
+    test('Should return 403 on load units by companyId without accessToken', async () => {
+      await request(app).get('/api/units/any_company_id').expect(403)
+    })
+
+    test('Should return 2xx on load units by companyId with valid accessToken', async () => {
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .get('/api/units/any_company_id')
+        .set('x-access-token', accessToken)
+        .expect(200 | 204)
+    })
+  })
 })
