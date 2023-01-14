@@ -82,6 +82,12 @@ describe('Company Mongo Repository', () => {
       const company = await sut.loadById(id.toHexString())
       expect(company).toBeTruthy()
     })
+
+    test('Should return null if loadById fails', async () => {
+      const sut = makeSut()
+      const company = await sut.loadById('63c115f15ae95ba560591c3b')
+      expect(company).toBeFalsy()
+    })
   })
 
   describe('loadAll()', () => {
