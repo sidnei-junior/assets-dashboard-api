@@ -24,27 +24,16 @@ const makeFakeUnits = (): UnitModel[] => [
   { id: 'other_id', name: 'other_name', companyId: 'any_company_id' }
 ]
 
-const makeValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(input: any): Error {
-      return null
-    }
-  }
-  return new ValidationStub()
-}
-
 type SutTypes = {
   sut: LoadUnitsByCompanyController
   loadUnitsByCompanyStub: LoadUnitsByCompany
-  validationStub: Validation
 }
 
 const makeSut = (): SutTypes => {
   const loadUnitsByCompanyStub = makeLoadUnitsByCompany()
-  const validationStub = makeValidation()
-  const sut = new LoadUnitsByCompanyController(loadUnitsByCompanyStub, validationStub)
+  const sut = new LoadUnitsByCompanyController(loadUnitsByCompanyStub)
 
-  return { sut, loadUnitsByCompanyStub, validationStub }
+  return { sut, loadUnitsByCompanyStub }
 }
 
 describe('LoadUnitsByCompany Controller', () => {

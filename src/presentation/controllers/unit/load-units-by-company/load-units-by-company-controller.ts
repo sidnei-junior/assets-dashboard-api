@@ -3,7 +3,7 @@ import { Controller, HttpRequest, HttpResponse, Validation } from '../../account
 import { badRequest, noContent, ok, serverError } from '../../account/signup/signup-controller-protocols'
 
 export class LoadUnitsByCompanyController implements Controller {
-  constructor(private readonly loadUnitsByCompany: LoadUnitsByCompany, private readonly validation: Validation) {}
+  constructor(private readonly loadUnitsByCompany: LoadUnitsByCompany) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
