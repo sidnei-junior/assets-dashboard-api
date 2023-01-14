@@ -1,5 +1,5 @@
 import { UpdateCompany } from '@/domain/usecases/company/update-company'
-import { notFound, serverError } from '@/presentation/helpers/http/http-helper'
+import { notFound, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class UpdateCompanyController implements Controller {
@@ -12,7 +12,7 @@ export class UpdateCompanyController implements Controller {
       if (company === null) {
         return notFound()
       }
-      return null
+      return ok(company)
     } catch (error) {
       return serverError(error)
     }
