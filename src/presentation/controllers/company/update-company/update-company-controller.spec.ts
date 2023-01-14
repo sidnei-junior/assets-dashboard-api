@@ -1,5 +1,7 @@
 import { CompanyModel } from '@/domain/models/company'
 import { UpdateCompany, UpdateCompanyModel } from '@/domain/usecases/company/update-company'
+import { ServerError } from '@/presentation/errors'
+import { serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { UpdateCompanyController } from './update-company-controller'
 
@@ -50,5 +52,14 @@ describe('UpdateCompany Controller', () => {
       },
       'any_id'
     )
+  })
+
+  test('Should return 500 if UpdateCompany throws', async () => {
+    const { sut, updateCompanyStub } = makeSut()
+    jest.spyOn(updateCompanyStub, 'update').mockImplementationOnce(async () => {
+      return new Promise((resolve, reject) => reject(new Error()))
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
