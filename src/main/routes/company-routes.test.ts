@@ -104,4 +104,10 @@ describe('Company Routes', () => {
         .expect(204)
     })
   })
+
+  describe('PUT /companies/:companyId', () => {
+    test('Should return 403 on update company without accessToken', async () => {
+      await request(app).put('/api/companies/any_company_id').expect(403)
+    })
+  })
 })
