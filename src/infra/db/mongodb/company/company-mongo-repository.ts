@@ -2,6 +2,7 @@ import { AddCompanyRepository } from '@/data/protocols/db/company/add-company-re
 import { DeleteCompanyRepository } from '@/data/protocols/db/company/delete-company-repository'
 import { LoadCompaniesRepository } from '@/data/protocols/db/company/load-companies-repository'
 import { LoadCompanyByCnpjRepository } from '@/data/protocols/db/company/load-company-by-cnpj-repository'
+import { LoadCompanyByIdRepository } from '@/data/protocols/db/company/load-company-by-id-repository'
 import { UpdateCompanyRepository } from '@/data/protocols/db/company/update-company-repository'
 import { CompanyModel } from '@/domain/models/company'
 import { AddCompanyModel } from '@/domain/usecases/company/add-company'
@@ -13,6 +14,7 @@ export class CompanyMongoRepository
   implements
     AddCompanyRepository,
     LoadCompanyByCnpjRepository,
+    LoadCompanyByIdRepository,
     LoadCompaniesRepository,
     DeleteCompanyRepository,
     UpdateCompanyRepository
@@ -29,6 +31,14 @@ export class CompanyMongoRepository
   async loadByCnpj(cnpj: string): Promise<CompanyModel> {
     const companyCollection = await MongoHelper.getCollection('companies')
     const companyByCnpj = await companyCollection.findOne({ cnpj })
+    const company = companyByCnpj && MongoHelper.map(companyByCnpj)
+    return company
+  }
+
+  async loadById(id: string): Promise<CompanyModel> {
+    const companyCollection = await MongoHelper.getCollection('companies')
+    const mongoId = new ObjectId(id)
+    const companyByCnpj = await companyCollection.findOne({ _id: mongoId })
     const company = companyByCnpj && MongoHelper.map(companyByCnpj)
     return company
   }
