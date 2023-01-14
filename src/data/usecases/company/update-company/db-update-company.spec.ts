@@ -44,4 +44,10 @@ describe('DbUpdateCompany', () => {
       cnpj: 'valid_cnpj'
     })
   })
+
+  test('Should return a company on success', async () => {
+    const { sut } = makeSut()
+    const company = await sut.update(makeFakeCompanyData())
+    expect(company).toEqual(makeFakeCompany())
+  })
 })
