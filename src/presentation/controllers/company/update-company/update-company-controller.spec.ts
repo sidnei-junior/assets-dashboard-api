@@ -1,7 +1,7 @@
 import { CompanyModel } from '@/domain/models/company'
 import { UpdateCompany, UpdateCompanyModel } from '@/domain/usecases/company/update-company'
 import { ServerError } from '@/presentation/errors'
-import { notFound, serverError } from '@/presentation/helpers/http/http-helper'
+import { notFound, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { UpdateCompanyController } from './update-company-controller'
 
@@ -68,5 +68,11 @@ describe('UpdateCompany Controller', () => {
     jest.spyOn(updateCompanyStub, 'update').mockReturnValueOnce(null)
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(notFound())
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeFakeCompany()))
   })
 })
