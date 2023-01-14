@@ -8,11 +8,6 @@ export class LoadUnitsByCompanyController implements Controller {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const units = await this.loadUnitsByCompany.load(httpRequest.body.companyId)
-
-      if (units === null) {
-        return notFound(new NotFoundError('company'))
-      }
-
       return units.length ? ok(units) : noContent()
     } catch (error) {
       return serverError(error)

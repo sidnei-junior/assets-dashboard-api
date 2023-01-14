@@ -51,13 +51,6 @@ describe('LoadUnitsByCompany Controller', () => {
     expect(loadSpy).toHaveBeenCalledWith('any_company_id')
   })
 
-  test('Should return 404 if LoadUnitsByCompany return null', async () => {
-    const { sut, loadUnitsByCompanyStub } = makeSut()
-    jest.spyOn(loadUnitsByCompanyStub, 'load').mockReturnValueOnce(null)
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(notFound(new NotFoundError('company')))
-  })
-
   test('Should return 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
