@@ -7,13 +7,7 @@ export class LoadUnitsByCompanyController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
-
-      if (error) {
-        return badRequest(error)
-      }
-
-      const units = await this.loadUnitsByCompany.load(httpRequest.body.companyId)
+      const units = await this.loadUnitsByCompany.load(httpRequest.params.companyId)
       return units.length ? ok(units) : noContent()
     } catch (error) {
       return serverError(error)
