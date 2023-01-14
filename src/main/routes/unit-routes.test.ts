@@ -109,4 +109,40 @@ describe('Unit Routes', () => {
         .expect(204)
     })
   })
+
+  describe('PUT /units/:unitId', () => {
+    test('Should return 403 on update unit without accessToken', async () => {
+      await request(app).put('/api/units/any_unit_id').expect(403)
+    })
+
+    test('Should return 200 on success', async () => {
+      const mongoCompanyResponse = await companyCollection.insertMany([
+        {
+          name: 'any_name',
+          cnpj: 'any_cnpj'
+        },
+        {
+          name: 'other_name',
+          cnpj: 'other_cnpj'
+        }
+      ])
+
+      const companyId = mongoCompanyResponse.insertedIds[0].toHexString()
+
+      const mongoUnitResponse = await unitCollection.insertOne({
+        name: 'any_name',
+        companyId
+      })
+
+      const accessToken = await makeAccessToken({ role: 'admin' })
+      await request(app)
+        .put(`/api/units/${mongoUnitResponse.insertedId.toHexString()}`)
+        .send({
+          name: 'update_name',
+          companyId: mongoCompanyResponse.insertedIds[1].toHexString()
+        })
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
+  })
 })
