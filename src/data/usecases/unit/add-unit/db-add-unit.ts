@@ -10,7 +10,11 @@ export class DbAddUnit implements AddUnit {
   ) {}
 
   async add(unitData: AddUnitModel): Promise<UnitModel> {
-    await this.loadCompanyByIdRepository.loadById(unitData.companyId)
+    const response = await this.loadCompanyByIdRepository.loadById(unitData.companyId)
+
+    if (response === null) {
+      return null
+    }
 
     const unit = await this.addUnitRepository.add(unitData)
     return unit
