@@ -3,8 +3,14 @@ import { Collection } from 'mongodb'
 import env from '@/main/config/env'
 import { MongoHelper } from '../helper/mongo-helper'
 import { UnitMongoRepository } from './unit-mongo-repository'
+import { AddUnitModel } from '@/domain/usecases/unit/add-unit'
 
 let unitCollection: Collection
+
+const makeFakeUnitsDatas = (): AddUnitModel[] => [
+  { name: 'any_name', companyId: 'any_company_id' },
+  { name: 'other_name', companyId: 'any_company_id' }
+]
 
 describe('Unit Mongo Repository', () => {
   beforeAll(async () => {
@@ -56,6 +62,26 @@ describe('Unit Mongo Repository', () => {
       expect(units[0].id).toBeTruthy()
       expect(units[0].name).toBe('any_name')
       expect(units[0].companyId).toBe('any_company_id')
+    })
+  })
+
+  describe('delete()', () => {
+    test('Should delete unit on success', async () => {
+      const sut = makeSut()
+      const result = await unitCollection.insertMany(makeFakeUnitsDatas())
+      const { insertedIds } = result
+      await sut.delete(insertedIds[0].toHexString())
+
+      const companies = await sut.loadByCompanyId('any_company_id')
+
+      expect(companies.length).toBe(1)
+      expect(companies[0].name).toBe('other_name')
+    })
+
+    test('Should return null if mongo return deleteCount 0', async () => {
+      const sut = makeSut()
+      const response = await sut.delete('63c170afa3a8b2549002bbd8')
+      expect(response).toBeNull()
     })
   })
 })
