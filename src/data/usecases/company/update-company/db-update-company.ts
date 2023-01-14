@@ -5,8 +5,8 @@ import { UpdateCompany, UpdateCompanyModel } from '@/domain/usecases/company/upd
 export class DbUpdateCompany implements UpdateCompany {
   constructor(private readonly updateCompanyRepository: UpdateCompanyRepository) {}
 
-  async update(companyData: UpdateCompanyModel): Promise<CompanyModel> {
-    const company = await this.updateCompanyRepository.update(companyData)
+  async update(companyData: UpdateCompanyModel, id: string): Promise<CompanyModel> {
+    const company = await this.updateCompanyRepository.update(companyData, id)
     return company
   }
 }

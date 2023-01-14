@@ -5,7 +5,7 @@ import { DbUpdateCompany } from './db-update-company'
 
 const makeUpdateCompanyRepository = (): UpdateCompanyRepository => {
   class UpdateCompanyRepositoryStub implements UpdateCompanyRepository {
-    async update(companyData: UpdateCompanyModel): Promise<CompanyModel> {
+    async update(companyData: UpdateCompanyModel, id: string): Promise<CompanyModel> {
       return makeFakeCompany()
     }
   }
@@ -38,16 +38,19 @@ describe('DbUpdateCompany', () => {
   test('Should call UpdateCompanyRepository with correct values', async () => {
     const { sut, updateCompanyRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateCompanyRepositoryStub, 'update')
-    await sut.update(makeFakeCompanyData())
-    expect(updateSpy).toHaveBeenCalledWith({
-      name: 'valid_name',
-      cnpj: 'valid_cnpj'
-    })
+    await sut.update(makeFakeCompanyData(), 'any_id')
+    expect(updateSpy).toHaveBeenCalledWith(
+      {
+        name: 'valid_name',
+        cnpj: 'valid_cnpj'
+      },
+      'any_id'
+    )
   })
 
   test('Should return a company on success', async () => {
     const { sut } = makeSut()
-    const company = await sut.update(makeFakeCompanyData())
+    const company = await sut.update(makeFakeCompanyData(), 'any_id')
     expect(company).toEqual(makeFakeCompany())
   })
 })
