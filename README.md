@@ -24,6 +24,16 @@
 
 [✔️] Listar Empresas
 
-[⭕] Atualizar Dados da Empresa
+[✔️] Atualizar Dados da Empresa
 
 [✔️] Deletar Empresa
+
+### Unidade (Unit)
+
+[⭕] Adicionar Unidade
+
+[⭕] Listar Unidades da Empresa
+
+[⭕] Atualizar Dados da Unidade
+
+[⭕] Deletar Unidade
