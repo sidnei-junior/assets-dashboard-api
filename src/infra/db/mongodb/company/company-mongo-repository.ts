@@ -2,13 +2,20 @@ import { AddCompanyRepository } from '@/data/protocols/db/company/add-company-re
 import { DeleteCompanyRepository } from '@/data/protocols/db/company/delete-company-repository'
 import { LoadCompaniesRepository } from '@/data/protocols/db/company/load-companies-repository'
 import { LoadCompanyByCnpjRepository } from '@/data/protocols/db/company/load-company-by-cnpj-repository'
+import { UpdateCompanyRepository } from '@/data/protocols/db/company/update-company-repository'
 import { CompanyModel } from '@/domain/models/company'
 import { AddCompanyModel } from '@/domain/usecases/company/add-company'
+import { UpdateCompanyModel } from '@/domain/usecases/company/update-company'
 import { ObjectId } from 'mongodb'
 import { MongoHelper } from '../helper/mongo-helper'
 
 export class CompanyMongoRepository
-  implements AddCompanyRepository, LoadCompanyByCnpjRepository, LoadCompaniesRepository, DeleteCompanyRepository
+  implements
+    AddCompanyRepository,
+    LoadCompanyByCnpjRepository,
+    LoadCompaniesRepository,
+    DeleteCompanyRepository,
+    UpdateCompanyRepository
 {
   async add(companyData: AddCompanyModel): Promise<CompanyModel> {
     const companyCollection = await MongoHelper.getCollection('companies')
@@ -40,5 +47,14 @@ export class CompanyMongoRepository
     if (deletedCount === 0) {
       return null
     }
+  }
+
+  async update(companyData: UpdateCompanyModel, id: string): Promise<CompanyModel> {
+    const mongoId = new ObjectId(id)
+    const companyCollection = await MongoHelper.getCollection('companies')
+    await companyCollection.updateMany({ _id: mongoId }, { $set: { ...companyData } })
+    const companyById = await companyCollection.findOne({ _id: mongoId })
+    const company = MongoHelper.map(companyById)
+    return company
   }
 }
