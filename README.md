@@ -4,7 +4,7 @@
 
 [⭕] Todo usuário está associado a uma empresa
 
-[⭕] Toda unidade está associada a uma empresa
+[✔️] Toda unidade está associada a uma empresa
 
 [⭕] Todo ativo está associado a uma unidade
 
@@ -34,6 +34,18 @@
 
 [✔️] Listar Unidades da Empresa
 
-[⭕] Atualizar Dados da Unidade
+[✔️] Atualizar Dados da Unidade
 
 [✔️] Deletar Unidade
+
+### Ativo (Asset)
+
+[⭕] Adicionar Ativo
+
+[⭕] Listar Ativos da Unidade
+
+[⭕] Listar Ativos da Empresa
+
+[⭕] Atualizar Dados do Ativo
+
+[⭕] Deletar Ativo
