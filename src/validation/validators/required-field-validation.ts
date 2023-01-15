@@ -5,7 +5,11 @@ export class RequiredFieldValidation implements Validation {
   constructor(private readonly fieldName: string) {}
 
   validate(input: any): Error {
-    if (!input[this.fieldName]) {
+    let fieldValue = input[this.fieldName]
+    if (typeof fieldValue === 'number') {
+      fieldValue = fieldValue + ''
+    }
+    if (!fieldValue) {
       return new MissingParamError(this.fieldName)
     }
   }
