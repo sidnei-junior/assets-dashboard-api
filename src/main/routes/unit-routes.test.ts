@@ -62,20 +62,20 @@ describe('Unit Routes', () => {
         })
         .expect(403)
     })
-  })
 
-  test('Should return 200 on add unit with valid accessToken', async () => {
-    const mongoResponse = await companyCollection.insertOne({ name: 'TRACTIAN', cnpj: '111.111' })
-    const { insertedId: id } = mongoResponse
-    const accessToken = await makeAccessToken({ role: 'admin' })
-    await request(app)
-      .post('/api/units')
-      .set('x-access-token', accessToken)
-      .send({
-        name: 'Guadalajara',
-        companyId: id.toHexString()
-      })
-      .expect(200)
+    test('Should return 200 on add unit with valid accessToken', async () => {
+      const mongoResponse = await companyCollection.insertOne({ name: 'TRACTIAN', cnpj: '111.111' })
+      const { insertedId: id } = mongoResponse
+      const accessToken = await makeAccessToken({ role: 'admin' })
+      await request(app)
+        .post('/api/units')
+        .set('x-access-token', accessToken)
+        .send({
+          name: 'Guadalajara',
+          companyId: id.toHexString()
+        })
+        .expect(200)
+    })
   })
 
   describe('GET /units', () => {
