@@ -26,6 +26,14 @@ export class UnitMongoRepository
     return units.map((unit) => MongoHelper.map(unit))
   }
 
+  async loadById(id: string): Promise<UnitModel> {
+    const unitCollection = await MongoHelper.getCollection('units')
+    const mongoId = new ObjectId(id)
+    const unitById = await unitCollection.findOne({ _id: mongoId })
+    const unit = unitById && MongoHelper.map(unitById)
+    return unit
+  }
+
   async delete(id: string): Promise<void> {
     const mongoId = new ObjectId(id)
     const unitCollection = await MongoHelper.getCollection('units')

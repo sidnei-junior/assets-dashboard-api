@@ -38,8 +38,8 @@ export class CompanyMongoRepository
   async loadById(id: string): Promise<CompanyModel> {
     const companyCollection = await MongoHelper.getCollection('companies')
     const mongoId = new ObjectId(id)
-    const companyByCnpj = await companyCollection.findOne({ _id: mongoId })
-    const company = companyByCnpj && MongoHelper.map(companyByCnpj)
+    const companyById = await companyCollection.findOne({ _id: mongoId })
+    const company = companyById && MongoHelper.map(companyById)
     return company
   }
 
