@@ -63,6 +63,26 @@ describe('Account Mongo Repository', () => {
     })
   })
 
+  describe('loadById()', () => {
+    test('Should return a account on loadById success', async () => {
+      const sut = makeSut()
+      const mongoResponse = await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      })
+      const { insertedId: id } = mongoResponse
+      const account = await sut.loadById(id.toHexString())
+      expect(account).toBeTruthy()
+    })
+
+    test('Should return null if loadById fails', async () => {
+      const sut = makeSut()
+      const account = await sut.loadById('63c115f15ae95ba560591c3b')
+      expect(account).toBeFalsy()
+    })
+  })
+
   describe('updateAccessToken()', () => {
     test('Should update the account accessToken on updateAccessToken success', async () => {
       const sut = makeSut()

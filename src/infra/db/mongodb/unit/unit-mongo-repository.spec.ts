@@ -82,6 +82,25 @@ describe('Unit Mongo Repository', () => {
     })
   })
 
+  describe('loadById()', () => {
+    test('Should return a unit on loadById success', async () => {
+      const sut = makeSut()
+      const mongoResponse = await unitCollection.insertOne({
+        name: 'any_name',
+        companyId: 'any_company_id'
+      })
+      const { insertedId: id } = mongoResponse
+      const unit = await sut.loadById(id.toHexString())
+      expect(unit).toBeTruthy()
+    })
+
+    test('Should return null if loadById fails', async () => {
+      const sut = makeSut()
+      const unit = await sut.loadById('63c115f15ae95ba560591c3b')
+      expect(unit).toBeFalsy()
+    })
+  })
+
   describe('delete()', () => {
     test('Should delete unit on success', async () => {
       const sut = makeSut()
