@@ -6,9 +6,9 @@
 
 [✔️] Toda unidade está associada a uma empresa
 
-[⭕] Todo ativo está associado a uma unidade
+[✔️] Todo ativo está associado a uma unidade
 
-[⭕] O usuário que pode criar qualquer entidade tem a permissão de dono
+[✔️] O usuário que pode criar qualquer entidade tem a permissão de admin
 
 ## Casos de uso
 
@@ -40,7 +40,7 @@
 
 ### Ativo (Asset)
 
-[⭕] Adicionar Ativo
+[✔️] Adicionar Ativo
 
 [⭕] Listar Ativos da Unidade
 
