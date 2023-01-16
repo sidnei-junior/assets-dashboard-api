@@ -1,7 +1,33 @@
+import { AddAssetModel } from '@/domain/usecases/asset/add-asset'
 import env from '@/main/config/env'
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helper/mongo-helper'
 import { AssetMongoRepository } from './asset-mongo-repository'
+
+const makeFakeAssetsDatas = (): AddAssetModel[] => [
+  {
+    unitId: 'any_unit_id',
+    ownerId: 'any_owner_id',
+    companyId: 'any_company_id',
+    name: 'any_name',
+    image: 'any_image',
+    description: 'any_description',
+    model: 'any_model',
+    status: 0,
+    healthLevel: 100
+  },
+  {
+    unitId: 'any_unit_id',
+    ownerId: 'any_owner_id',
+    companyId: 'any_company_id',
+    name: 'other_name',
+    image: 'other_image',
+    description: 'other_description',
+    model: 'other_model',
+    status: 0,
+    healthLevel: 100
+  }
+]
 
 let assetCollection: Collection
 
@@ -88,35 +114,32 @@ describe('Asset Mongo Repository', () => {
   describe('loadByCompanyId()', () => {
     test('Should return a list of assets on loadByCompanyId success', async () => {
       const sut = makeSut()
-      await assetCollection.insertMany([
-        {
-          unitId: 'any_unit_id',
-          ownerId: 'any_owner_id',
-          companyId: 'any_company_id',
-          name: 'any_name',
-          image: 'any_image',
-          description: 'any_description',
-          model: 'any_model',
-          status: 0,
-          healthLevel: 100
-        },
-        {
-          unitId: 'any_unit_id',
-          ownerId: 'any_owner_id',
-          companyId: 'any_company_id',
-          name: 'other_name',
-          image: 'other_image',
-          description: 'other_description',
-          model: 'other_model',
-          status: 0,
-          healthLevel: 100
-        }
-      ])
+      await assetCollection.insertMany(makeFakeAssetsDatas())
       const units = await sut.loadByCompanyId('any_company_id')
       expect(units.length).toBe(2)
       expect(units[0].id).toBeTruthy()
       expect(units[0].name).toBe('any_name')
       expect(units[0].companyId).toBe('any_company_id')
+    })
+  })
+
+  describe('delete()', () => {
+    test('Should delete asset on success', async () => {
+      const sut = makeSut()
+      const result = await assetCollection.insertMany(makeFakeAssetsDatas())
+      const { insertedIds } = result
+      await sut.delete(insertedIds[0].toHexString())
+
+      const assets = await sut.loadByUnitId('any_unit_id')
+
+      expect(assets.length).toBe(1)
+      expect(assets[0].name).toBe('other_name')
+    })
+
+    test('Should return null if mongo return deleteCount 0', async () => {
+      const sut = makeSut()
+      const response = await sut.delete('63c170afa3a8b2549002bbd8')
+      expect(response).toBeNull()
     })
   })
 })

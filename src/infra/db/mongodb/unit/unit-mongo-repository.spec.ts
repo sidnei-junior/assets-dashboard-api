@@ -108,10 +108,10 @@ describe('Unit Mongo Repository', () => {
       const { insertedIds } = result
       await sut.delete(insertedIds[0].toHexString())
 
-      const companies = await sut.loadByCompanyId('any_company_id')
+      const units = await sut.loadByCompanyId('any_company_id')
 
-      expect(companies.length).toBe(1)
-      expect(companies[0].name).toBe('other_name')
+      expect(units.length).toBe(1)
+      expect(units[0].name).toBe('other_name')
     })
 
     test('Should return null if mongo return deleteCount 0', async () => {
