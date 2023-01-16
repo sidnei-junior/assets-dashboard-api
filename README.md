@@ -44,7 +44,7 @@
 
 [✔️] Listar Ativos da Unidade
 
-[⭕] Listar Ativos da Empresa
+[✔️] Listar Ativos da Empresa
 
 [⭕] Atualizar Dados do Ativo
 
