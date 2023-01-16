@@ -94,7 +94,7 @@ describe('Unit Routes', () => {
 
   describe('DELETE /units/:unitId', () => {
     test('Should return 403 on delete unit without accessToken', async () => {
-      await request(app).delete('/api/companies/any_unit_id').expect(403)
+      await request(app).delete('/api/units/any_unit_id').expect(403)
     })
 
     test('Should return 204 on success', async () => {
