@@ -115,7 +115,21 @@ describe('Asset Routes', () => {
     test('Should return 2xx on load assets by unitId with valid accessToken', async () => {
       const accessToken = await makeAccessToken()
       await request(app)
-        .get('/api/units/any_unit_id')
+        .get('/api/assets/any_unit_id')
+        .set('x-access-token', accessToken)
+        .expect(200 | 204)
+    })
+  })
+
+  describe('GET /assets/units/:companyId', () => {
+    test('Should return 403 on load assets by companyId without accessToken', async () => {
+      await request(app).get('/api/assets/units/any_company_id').expect(403)
+    })
+
+    test('Should return 2xx on load assets by companyId with valid accessToken', async () => {
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .get('/api/assets/units/any_company_id')
         .set('x-access-token', accessToken)
         .expect(200 | 204)
     })
