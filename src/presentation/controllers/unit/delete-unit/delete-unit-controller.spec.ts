@@ -1,7 +1,7 @@
 import { DeleteUnit } from '@/domain/usecases/unit/delete-unit'
 import { HttpRequest } from '../../account/login/login-controller-protocols'
 import { noContent, notFound, ServerError, serverError } from '../../account/signup/signup-controller-protocols'
-import { DeleteUnitController } from './delete-company-controller'
+import { DeleteUnitController } from './delete-unit-controller'
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
