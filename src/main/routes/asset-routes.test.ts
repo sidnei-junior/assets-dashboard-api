@@ -35,7 +35,7 @@ const makeAccessToken = async (roleObject: RoleObject = null): Promise<string> =
   return accessToken
 }
 
-describe('Unit Routes', () => {
+describe('Asset Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(env.mongoUrl)
   })
@@ -104,6 +104,20 @@ describe('Unit Routes', () => {
           healthLevel: 100
         })
         .expect(200)
+    })
+  })
+
+  describe('GET /assets/:unitId', () => {
+    test('Should return 403 on load assets by unitId without accessToken', async () => {
+      await request(app).get('/api/assets/any_unit_id').expect(403)
+    })
+
+    test('Should return 2xx on load assets by unitId with valid accessToken', async () => {
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .get('/api/units/any_unit_id')
+        .set('x-access-token', accessToken)
+        .expect(200 | 204)
     })
   })
 })
