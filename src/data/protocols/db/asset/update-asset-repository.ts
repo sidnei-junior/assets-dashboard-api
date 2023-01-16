@@ -1,7 +1,6 @@
 import { AssetModel } from '@/domain/models/asset'
+import { UpdateAssetModel } from '@/domain/usecases/asset/update-asset'
 
-export type UpdateAssetModel = Omit<AssetModel, 'id' | 'companyId'> & { companyId?: string }
-
-export interface UpdateAsset {
+export interface UpdateAssetRepository {
   update: (assetData: UpdateAssetModel, id: string) => Promise<AssetModel | string>
 }
