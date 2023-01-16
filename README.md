@@ -2,7 +2,6 @@
 
 ## Executar local
 
-
 - Clonar repositório: 
 
 ```git clone https://github.com/sidnei-junior/assets-dashboard-api.git```
@@ -22,6 +21,10 @@
 ## Deploy
 
 Heroku\<host\>: https://assets-dashboard-api.herokuapp.com
+
+## Link para coleção de requisições para Insomnia
+
+https://drive.google.com/drive/folders/1r17S9kAZKPf3LVyYkw8FTGniRXwMlHTn?usp=sharing
 
 ## Regras de negócio
 
