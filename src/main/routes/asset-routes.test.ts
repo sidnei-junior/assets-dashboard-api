@@ -134,4 +134,28 @@ describe('Asset Routes', () => {
         .expect(200 | 204)
     })
   })
+
+  describe('DELETE /assets/:assetId', () => {
+    test('Should return 403 on delete asset without accessToken', async () => {
+      await request(app).delete('/api/assets/any_asset_id').expect(403)
+    })
+
+    test('Should return 204 on success', async () => {
+      const mongoResponse = await assetCollection.insertOne({
+        unitId: 'any_unit_id',
+        ownerId: 'any_owner_id',
+        name: 'any_name',
+        image: 'any_image',
+        description: 'any_description',
+        model: 'any_model',
+        status: 0,
+        healthLevel: 100
+      })
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .delete(`/api/assets/${mongoResponse.insertedId.toHexString()}`)
+        .set('x-access-token', accessToken)
+        .expect(204)
+    })
+  })
 })
