@@ -42,7 +42,7 @@
 
 [✔️] Adicionar Ativo
 
-[⭕] Listar Ativos da Unidade
+[✔️] Listar Ativos da Unidade
 
 [⭕] Listar Ativos da Empresa
 
