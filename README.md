@@ -20,9 +20,23 @@
 
 ## Deploy
 
-Heroku\<host\>: https://assets-dashboard-api.herokuapp.com
+<img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white"/>
 
-## Link para coleção de requisições para Insomnia
+\<host\>: https://assets-dashboard-api.herokuapp.com
+
+## Tecnologias
+
+<img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white"/><img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" /><img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" /><img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
+
+## Padrões de projeto
+
+- Clean Code
+- Clean Architecture
+- Test Driven Development (TDD)
+
+## Link para coleção de requisições
+
+<img src="https://img.shields.io/badge/Insomnia-5849be?style=for-the-badge&logo=Insomnia&logoColor=white"/> 
 
 https://drive.google.com/drive/folders/1r17S9kAZKPf3LVyYkw8FTGniRXwMlHTn?usp=sharing
 
