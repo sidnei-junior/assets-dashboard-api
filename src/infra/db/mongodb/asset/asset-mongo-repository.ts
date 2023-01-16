@@ -4,6 +4,7 @@ import { LoadAssetsByCompanyRepository } from '@/data/protocols/db/asset/load-as
 import { LoadAssetsByUnitRepository } from '@/data/protocols/db/asset/load-assets-by-unit-repository'
 import { AssetModel } from '@/domain/models/asset'
 import { AddAssetModel } from '@/domain/usecases/asset/add-asset'
+import { UpdateAssetModel } from '@/domain/usecases/asset/update-asset'
 import { ObjectId } from 'mongodb'
 import { MongoHelper } from '../helper/mongo-helper'
 
@@ -39,5 +40,17 @@ export class AssetMongoRepository
     if (deletedCount === 0) {
       return null
     }
+  }
+
+  async update(assetData: UpdateAssetModel, id: string): Promise<AssetModel | string> {
+    const mongoId = new ObjectId(id)
+    const assetCollection = await MongoHelper.getCollection('assets')
+    const { matchedCount } = await assetCollection.updateOne({ _id: mongoId }, { $set: { ...assetData } })
+    if (matchedCount === 0) {
+      return 'asset'
+    }
+    const assetById = await assetCollection.findOne({ _id: mongoId })
+    const asset = MongoHelper.map(assetById)
+    return asset
   }
 }
