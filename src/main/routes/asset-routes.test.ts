@@ -158,4 +158,80 @@ describe('Asset Routes', () => {
         .expect(204)
     })
   })
+
+  describe('PUT /assets/:assetId', () => {
+    test('Should return 403 on update asset without accessToken', async () => {
+      await request(app).put('/api/assets/any_asset_id').expect(403)
+    })
+
+    test('Should return 200 on success', async () => {
+      const mongoAccountResponse = await accountCollection.insertMany([
+        {
+          name: 'any_name',
+          email: 'any_email@mail.com',
+          password: 'any_password'
+        },
+        {
+          name: 'other_name',
+          email: 'other_email@mail.com',
+          password: 'other_password'
+        }
+      ])
+
+      const ownerId = mongoAccountResponse.insertedIds[0].toHexString()
+
+      const mongoCompanyResponse = await companyCollection.insertMany([
+        {
+          name: 'any_name',
+          cnpj: 'any_cnpj'
+        },
+        {
+          name: 'other_name',
+          cnpj: 'other_cnpj'
+        }
+      ])
+
+      const companyId = mongoCompanyResponse.insertedIds[0].toHexString()
+
+      const mongoUnitResponse = await unitCollection.insertMany([
+        {
+          name: 'any_name',
+          companyId
+        },
+        {
+          name: 'other_name',
+          companyId
+        }
+      ])
+
+      const unitId = mongoUnitResponse.insertedIds[0].toHexString()
+
+      const mongoAssetResponse = await assetCollection.insertOne({
+        unitId,
+        ownerId,
+        name: 'any_name',
+        image: 'any_image',
+        description: 'any_description',
+        model: 'any_model',
+        status: 0,
+        healthLevel: 100
+      })
+
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .put(`/api/assets/${mongoAssetResponse.insertedId.toHexString()}`)
+        .send({
+          unitId: mongoUnitResponse.insertedIds[1].toHexString(),
+          ownerId: mongoAccountResponse.insertedIds[1].toHexString(),
+          name: 'update_name',
+          image: 'update_image',
+          description: 'update_description',
+          model: 'update_model',
+          status: 1,
+          healthLevel: 80
+        })
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
+  })
 })
