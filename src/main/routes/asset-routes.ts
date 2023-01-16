@@ -4,6 +4,7 @@ import { makeAddAssetController } from '../factories/controllers/asset/add-asset
 import { makeDeleteAssetController } from '../factories/controllers/asset/delete-asset/delete-asset-controller-factory'
 import { makeLoadAssetsByCompanyController } from '../factories/controllers/asset/load-asset-by-company/load-asset-by-company-controller-factory'
 import { makeLoadAssetsByUnitController } from '../factories/controllers/asset/load-asset-by-unit/load-asset-by-unit-controller-factory'
+import { makeUpdateAssetController } from '../factories/controllers/asset/update-asset/update-asset-controller-factory'
 import { adminAuth } from '../middlewares/admin-auth'
 import { auth } from '../middlewares/auth'
 
@@ -12,4 +13,5 @@ export default (router: Router): void => {
   router.get('/assets/:unitId', auth, adaptRoute(makeLoadAssetsByUnitController()))
   router.get('/assets/units/:companyId', auth, adaptRoute(makeLoadAssetsByCompanyController()))
   router.delete('/assets/:assetId', auth, adaptRoute(makeDeleteAssetController()))
+  router.put('/assets/:assetId', auth, adaptRoute(makeUpdateAssetController()))
 }
