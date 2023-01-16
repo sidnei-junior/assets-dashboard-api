@@ -1,5 +1,5 @@
 import { DeleteUnitRepository } from '@/data/protocols/db/unit/delete-unit-repository'
-import { DbDeleteUnit } from './db-delete-delete'
+import { DbDeleteUnit } from './db-delete-unit'
 
 const makeDeleteUnitRepository = (): DeleteUnitRepository => {
   class DeleteUnitRepositoryStub implements DeleteUnitRepository {
