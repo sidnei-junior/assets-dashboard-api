@@ -46,6 +46,6 @@
 
 [✔️] Listar Ativos da Empresa
 
-[⭕] Atualizar Dados do Ativo
+[✔️] Atualizar Dados do Ativo
 
 [✔️] Deletar Ativo
