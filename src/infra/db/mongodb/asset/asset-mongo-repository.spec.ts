@@ -1,4 +1,6 @@
 import { AddAssetModel } from '@/domain/usecases/asset/add-asset'
+import { AddCompanyModel } from '@/domain/usecases/company/add-company'
+import { AddUnitModel } from '@/domain/usecases/unit/add-unit'
 import env from '@/main/config/env'
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helper/mongo-helper'
@@ -29,7 +31,27 @@ const makeFakeAssetsDatas = (): AddAssetModel[] => [
   }
 ]
 
+const makeFakeUnitData = (): AddUnitModel => ({ name: 'any_name', companyId: 'any_company_id' })
+
+const makeFakeCompaniesDatas = (): AddCompanyModel[] => [
+  {
+    name: 'any_name',
+    cnpj: 'any_cnpj'
+  },
+  {
+    name: 'other_name',
+    cnpj: 'other_cnpj'
+  }
+]
+
+const makeFakeUnitsDatas = (): AddUnitModel[] => [
+  { name: 'any_name', companyId: 'any_company_id' },
+  { name: 'other_name', companyId: 'any_company_id' }
+]
+
 let assetCollection: Collection
+let companyCollection: Collection
+let unitCollection: Collection
 
 describe('Asset Mongo Repository', () => {
   beforeAll(async () => {
@@ -43,6 +65,10 @@ describe('Asset Mongo Repository', () => {
   beforeEach(async () => {
     assetCollection = await MongoHelper.getCollection('assets')
     await assetCollection.deleteMany({})
+    companyCollection = await MongoHelper.getCollection('companies')
+    await companyCollection.deleteMany({})
+    unitCollection = await MongoHelper.getCollection('units')
+    await unitCollection.deleteMany({})
   })
 
   const makeSut = (): AssetMongoRepository => {
@@ -140,6 +166,64 @@ describe('Asset Mongo Repository', () => {
       const sut = makeSut()
       const response = await sut.delete('63c170afa3a8b2549002bbd8')
       expect(response).toBeNull()
+    })
+  })
+
+  describe('update()', () => {
+    test('Should update asset on success', async () => {
+      const sut = makeSut()
+
+      const companyResult = await companyCollection.insertMany(makeFakeCompaniesDatas())
+      const { insertedIds: companiesIds } = companyResult
+
+      const unitResult = await unitCollection.insertOne({
+        ...makeFakeUnitData(),
+        companyId: companiesIds[0].toHexString()
+      })
+      const { insertedId: unitId } = unitResult
+
+      const assetResult = await assetCollection.insertMany(makeFakeAssetsDatas())
+      const { insertedIds } = assetResult
+
+      await sut.update(
+        {
+          unitId: unitId.toHexString(),
+          ownerId: 'update_owner_id',
+          companyId: companiesIds[1].toHexString(),
+          name: 'update_name',
+          image: 'update_image',
+          description: 'update_description',
+          model: 'update_model',
+          status: 0,
+          healthLevel: 100
+        },
+        insertedIds[0].toHexString()
+      )
+
+      const units = await sut.loadByCompanyId(companiesIds[1].toHexString())
+
+      expect(units.length).toBe(1)
+      expect(units[0].name).toBe('update_name')
+      expect(units[0].companyId).toBe(companiesIds[1].toHexString())
+    })
+
+    test('Should return string unit if mongo return matchedCount 0', async () => {
+      const sut = makeSut()
+      const response = await sut.update(
+        {
+          unitId: 'any_unit_id',
+          ownerId: 'any_owner_id',
+          companyId: 'any_company_id',
+          name: 'other_name',
+          image: 'other_image',
+          description: 'other_description',
+          model: 'other_model',
+          status: 0,
+          healthLevel: 100
+        },
+        '63c170afa3a8b2549002bbd8'
+      )
+      expect(response).toBe('asset')
     })
   })
 })
