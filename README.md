@@ -48,4 +48,4 @@
 
 [⭕] Atualizar Dados do Ativo
 
-[⭕] Deletar Ativo
+[✔️] Deletar Ativo
